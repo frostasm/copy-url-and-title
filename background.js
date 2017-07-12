@@ -67,6 +67,23 @@ var s = '';
   	})
 }
 
+function copyMarkdown() {
+  chrome.tabs.getSelected(null, function(tab) {
+    copyToClipboard("["+tab.title+"]("+tab.url+")\r\n");    
+  });
+}
+
+
+function copyAllMarkdown() {
+var s = '';
+  chrome.tabs.getAllInWindow(null, function(tabs) {
+  		for (var i=0; i < tabs.length; i++){
+		    s=s+"* ["+tabs[i].title+"]("+tabs[i].url+")  \r\n";
+			}
+  		copyToClipboard(s);
+  	})
+}
+
 function copyToClipboard(str) {
     var obj=document.getElementById("clipboard");
 
@@ -93,6 +110,8 @@ var child4 = chrome.contextMenus.create(
   {"title": "HTML", "parentId": parent, "onclick": copyAllHTML});
 //var child5 = chrome.contextMenus.create(
   //{"title": "Open new tab", "parentId": parent, "onclick": TABgenericOnClick});
+var child5 = chrome.contextMenus.create(
+  {"title": "Markdown", "parentId": parent, "onclick": copyAllMarkdown});
 
 var title="Copy URL"
 var parent = chrome.contextMenus.create({"title": title});
@@ -105,3 +124,5 @@ var child8 = chrome.contextMenus.create(
   {"title": "Page Title and URL", "parentId": parent, "onclick": copyTitleURL});
 var child9 = chrome.contextMenus.create(
   {"title": "HTML", "parentId": parent, "onclick": copyHTML});
+var child10 = chrome.contextMenus.create(
+  {"title": "Markdown", "parentId": parent, "onclick": copyMarkdown});
